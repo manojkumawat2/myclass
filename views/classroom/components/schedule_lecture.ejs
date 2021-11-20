@@ -1,0 +1,68 @@
+<div class="schedle_class card border container mt-5 p-3">
+    <h4 class="text-primary fw-bold">
+        Schedule a New Lecture
+    </h4>
+    <!-- Buttons trigger collapse -->
+    <form id="lecture_schedule" action="<%= baseURL+'submit_lecture_details' %>" method="post">
+        <input type="hidden" name="class_unique_key" value="<%= class_unique_key %>">
+        <div class="row">
+            <div class="col-sm">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" name="title" id="title" aria-describedby="emailHelp">
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="mb-3">
+                    <label for="lecture_date" class="form-label">Date</label>
+                    <input type="text" class="form-control" name="lecture_date" id="lecture_date"
+                        aria-describedby="emailHelp">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm">
+                <div class="mb-3">
+                    <label for="start_time" class="form-label">Start Time</label>
+                    <input type="time" class="form-control" name="start_time" id="start_time"
+                        aria-describedby="emailHelp">
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="mb-3">
+                    <label for="end_time" class="form-label">End Time</label>
+                    <input type="time" class="form-control" name="end_time" id="end_time" aria-describedby="emailHelp">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm">
+                <div class="mb-3">
+                    <label for="lecture_mode" class="form-label">Lecture Mode</label>
+                    <select name="lecture_mode" id="lecture_mode" class="form-select"
+                        aria-label="Default select example">
+                        <option value="online">Online</option>
+                        <option value="offline">Offline</option>
+                        <option value="both">Both</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="mb-3">
+                    <label for="available_seats" class="form-label">Total Seats in Offline Mode</label>
+                    <input type="text" class="form-control" name="available_seats" id="available_seats"
+                        aria-describedby="emailHelp" value="0">
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="lecture_description" class="form-label">Lecture Description</label>
+            <textarea type="text" class="form-control" name="lecture_description" id="lecture_description"
+                aria-describedby="emailHelp"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-sm">Schedule</button>
+    </form>
+</div>

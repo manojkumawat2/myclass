@@ -1,0 +1,73 @@
+<div class="container p-0 mt-5">
+    <h5 class="p-1">Joined Classrooms</h5>
+    <hr>
+    <% if(joined_classes.length==0 || joined_classes==null) { %>
+        <div class="joined_classes_empty p-3">
+            <img src="static/images/empty_joined_class.svg" class="empty_joined_class_img" alt="" srcset="">
+            <h6 class="mt-3">No Classroom Joined</h6>
+        </div>
+        <% } else { %>
+            <div class="row row-cols-1 row-cols-sm-4 g-3">
+                <% joined_classes.forEach(function(class_info) { %>
+                    <div class="col class_card">
+                        <div class="card border border-primary">
+                            <div class="card-header">
+                                <h5 class="card-title">
+                                    <%= class_info.subject.substring(0, 20)  %>
+                                    <% if(class_info.subject.length > 20) { %>
+                                        ...
+                                    <% } %>
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="faculty_info">
+                                    <i class="fas fa-user-circle"></i> Manoj Kumawat
+                                </p>
+                                <p class="class_description" style="height: 80px;">
+                                    <%= class_info.description %>
+                                </p>
+                                <a href="<%= baseURL+'class/'+class_info.unique_key %>" class="btn btn-sm btn-outline-primary btn-rounded">View</a>
+                            </div>
+                        </div>
+                    </div>
+                    <% }); %>
+            </div>
+            <% } %>
+</div>
+
+<div class="container p-0 mt-5">
+    <h5 class="p-1">Created Classrooms</h5>
+    <hr>
+    <% if(joined_classes.length==0 || joined_classes==null) { %>
+        <div class="joined_classes_empty p-3">
+            <img src="static/images/empty_joined_class.svg" class="empty_joined_class_img" alt="" srcset="">
+            <h6 class="mt-3">No Classroom Joined</h6>
+        </div>
+        <% } else { %>
+            <div class="row row-cols-sm-4 g-3 mb-3">
+                <% owned_classes.forEach(function(class_info) { %>
+                    <div class="col class_card">
+                        <div class="card border border-warning shadow-0">
+                            <div class="card-header">
+                                <h5 class="card-title">
+                                    <%= class_info.subject.substring(0, 20) %>
+                                    <% if(class_info.subject.length > 20) { %>
+                                        ...
+                                    <% } %>
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="faculty_info">
+                                    <i class="fas fa-user-circle"></i> Manoj Kumawat
+                                </p>
+                                <p class="class_description" style="height: 80px;">
+                                    <%= class_info.description %>
+                                </p>
+                                <a href="<%= baseURL+'class/'+class_info.unique_key %>" class="btn btn-sm btn-outline-primary btn-rounded">View</a>
+                            </div>
+                        </div>
+                    </div>
+                    <% }); %>
+            </div>
+            <% } %>
+</div>

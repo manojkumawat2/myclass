@@ -1,0 +1,76 @@
+<!-- Tabs navs -->
+<ul class="nav nav-tabs nav-fill container mt-5 border" id="ex1" role="tablist">
+  <li class="nav-item" role="presentation">
+    <a
+      class="nav-link active fw-bold"
+      id="ex2-tab-1"
+      data-mdb-toggle="tab"
+      href="#ex2-tabs-1"
+      role="tab"
+      aria-controls="ex2-tabs-1"
+      aria-selected="true"
+      >Upcoming Lectures</a
+    >
+  </li>
+  <% if(role == "faculty") { %>
+  <li class="nav-item" role="presentation">
+    <a
+      class="nav-link fw-bold"
+      id="ex2-tab-2"
+      data-mdb-toggle="tab"
+      href="#ex2-tabs-2"
+      role="tab"
+      aria-controls="ex2-tabs-2"
+      aria-selected="false"
+      >Schedule Lecture</a
+    >
+  </li>
+  <%}%>
+  <li class="nav-item" role="presentation">
+    <a
+      class="nav-link fw-bold"
+      id="ex2-tab-3"
+      data-mdb-toggle="tab"
+      href="#ex2-tabs-3"
+      role="tab"
+      aria-controls="ex2-tabs-3"
+      aria-selected="false"
+      >Lecture History</a
+    >
+  </li>
+</ul>
+<!-- Tabs navs -->
+
+<!-- Tabs content -->
+<div class="tab-content container border" id="ex2-content">
+  <div
+    class="tab-pane fade show active"
+    id="ex2-tabs-1"
+    role="tabpanel"
+    aria-labelledby="ex2-tab-1"
+  >
+    <!---Upcoming Lectures---->
+    <%- include('./components/upcoming_lectures.ejs') %>
+  </div>
+  <div
+    class="tab-pane fade"
+    id="ex2-tabs-2"
+    role="tabpanel"
+    aria-labelledby="ex2-tab-2"
+  >
+    <!---Schedule a class-->
+    <% if(role == "faculty") { %>
+        <%- include('./components/schedule_lecture.ejs') %>
+    <%}%>
+
+  </div>
+  <div
+    class="tab-pane fade"
+    id="ex2-tabs-3"
+    role="tabpanel"
+    aria-labelledby="ex2-tab-3"
+  >
+    <%- include('./components/lecture_history.ejs') %>
+  </div>
+</div>
+<!-- Tabs content -->

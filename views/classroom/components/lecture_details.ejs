@@ -1,0 +1,202 @@
+<div class="lecture_details">
+	<% if(role=="faculty" ) { %>
+	<!-- Button trigger modal -->
+	<button type="button" class="btn btn-primary" data-mdb-toggle="modal" data-mdb-target="#lecture_edit_modal">
+		Edit Details
+	</button>
+	<% } else if(role=="student" ) { %>
+
+	<% } %>
+	<br /> <br />
+	<table class="table fs-6 table-bordered">
+		<tbody>
+			<tr>
+				<td class="fw-bold text-center">Title: </td>
+				<td>
+					<%= lecture_details.title %>
+				</td>
+			</tr>
+			<tr>
+				<td class="fw-bold text-center">Date: </td>
+				<td>
+					<script type="text/javascript">
+						const lecture_date = new Date("<%= lecture_details.date %>");
+						let day = "";
+						switch (lecture_date.getDay()) {
+							case 0: day = "Sunday";
+								break;
+							case 1: day = "Monday";
+								break;
+							case 2: day = "Tuesday";
+								break;
+							case 3: day = "Wednesday";
+								break;
+							case 4: day = "Thursday";
+								break;
+							case 5: day = "Friday";
+								break;
+							case 6: day = "Saturday";
+								break;
+						}
+
+						document.write(day + ', ' + lecture_date.getDate() + '-' + new Intl.DateTimeFormat('en-US', { month: 'long' }).format(lecture_date) + '-' + lecture_date.getFullYear());
+					</script>
+				</td>
+			</tr>
+			<tr>
+				<td class="fw-bold text-center">Timing: </td>
+				<td>
+					<%= lecture_details.start_time.substring(0, 5) %> - <%= lecture_details.end_time.substring(0, 5) %>
+				</td>
+			</tr>
+			<tr>
+				<td class="fw-bold text-center">Lecture Mode: </td>
+				<td>
+					<%= lecture_details.lecture_mode %>
+				</td>
+			</tr>
+			<tr>
+				<td class="fw-bold text-center">Offline Seats: </td>
+				<td>
+					<%= lecture_details.offline_seats %>
+				</td>
+			</tr>
+			<% if(role=="student" ) {%>
+			<tr>
+				<td class="fw-bold text-center">Your Preference: </td>
+				<td>
+					<% if(lecture_preference !=null) {%>
+					<span class="<%= (lecture_preference.mode == " offline" ? "text-success"
+											: "text-primary" ) %>"><%= lecture_preference.mode %></span>
+					<% } %>
+					<button type="button" class="btn btn-outline-danger btn-floating btn-sm ms-3"
+						data-mdb-ripple-color="dark" data-mdb-toggle="modal" data-mdb-target="#update_preference">
+						<i class="fas fa-edit"></i>
+					</button>
+				</td>
+			</tr>
+			<% } %>
+		</tbody>
+	</table>
+	<div class="lecture_desciption_show">
+		<h4 class="fw-bold">Lecture Description</h4>
+		<div>
+			<%- lecture_details.description %>
+		</div>
+	</div>
+</div>
+
+
+<% if(role=="faculty" ) { %>
+<!-- Edit Lecture Details Modal -->
+<div class="modal fade" id="lecture_edit_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-xl">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Edit Details</h5>
+				<button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form id="lecture_schedule" action="<%= baseURL+'update_lecture_details' %>" method="post">
+					<input type="hidden" name="class_unique_key" value="<%= class_unique_key %>">
+					<input type="hidden" name="lecture_id" value="<%= lecture_id %>">
+					<div class="row">
+						<div class="col-sm">
+							<div class="mb-3">
+								<label for="title" class="form-label">Title</label>
+								<input type="text" class="form-control" name="title" id="title"
+									value="<%= lecture_details.title %>" <%= (Date.parse(lecture_details.date) < Date.now()) ? "readonly" : "" %>>
+							</div>
+						</div>
+						<div class="col-sm">
+							<div class="mb-3">
+								<label for="lecture_date" class="form-label">Date</label>
+								<input type="text" class="form-control" name="lecture_date" id="lecture_date"
+									value="<%= new Date(lecture_details.date).getFullYear() + '-' + new Date(lecture_details.date).getMonth() + '-' + new Date(lecture_details.date).getDate() %>" <%= (Date.parse(lecture_details.date) < Date.now()) ? "readonly" : "" %>>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm">
+							<div class="mb-3">
+								<label for="start_time" class="form-label">Start Time</label>
+								<input type="time" class="form-control" name="start_time" id="start_time"
+									value="5:30 PM" <%= (Date.parse(lecture_details.date) < Date.now()) ? "readonly" : "" %>>
+							</div>
+						</div>
+						<div class="col-sm">
+							<div class="mb-3">
+								<label for="end_time" class="form-label">End Time</label>
+								<input type="time" class="form-control" name="end_time" id="end_time" <%= (Date.parse(lecture_details.date) < Date.now()) ? "readonly" : "" %>>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm">
+							<div class="mb-3">
+								<label for="lecture_mode" class="form-label">Lecture Mode</label>
+								<select name="lecture_mode" id="lecture_mode" class="form-select"
+									aria-label="Default select example" onchange="this.value = '<%= lecture_details.lecture_mode %>'">
+									<option value="online" <%=(lecture_details.lecture_mode=="online" ? "selected"
+											: "" ) %>>Online</option>
+									<option value="offline" <%=(lecture_details.lecture_mode=="offline" ? "selected"
+											: "" ) %>>Offline</option>
+									<option value="both" <%=(lecture_details.lecture_mode=="both" ? "selected" : ""
+											) %>>Both</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-sm">
+							<div class="mb-3">
+								<label for="available_seats" class="form-label">Total Seats in Offline Mode</label>
+								<input type="text" class="form-control" name="available_seats" id="available_seats"
+									value="<%= lecture_details.offline_seats %>" <%= (Date.parse(lecture_details.date) < Date.now()) ? "readonly" : "" %>>
+							</div>
+						</div>
+					</div>
+					<div class="mb-3">
+						<label for="lecture_description" class="form-label">Lecture Description</label>
+						<div type="text" class="form-control" name="lecture_description" id="lecture_description">
+							<%- lecture_details.description %>
+						</div>
+					</div>
+
+					<button type="submit" class="btn btn-primary btn-sm">Schedule</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<%} else if(role=="student" ) {%>
+<!-- Update Preference Modal Modal -->
+<div class="modal fade" id="update_preference" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Update Preference</h5>
+				<button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form id="preference_form_update" action="<%= baseURL + 'update_preference' %>" method="POST">
+					<input type="hidden" name="class_unique_key" value="<%= class_unique_key %>">
+					<input type="hidden" name="lecture_id" value="<%= lecture_id %>">
+					<div class="mb-3">
+						<label for="select_preference" class="form-label">Lecture Mode</label>
+						<select name="select_preference" id="select_preference" class="form-select"
+							aria-label="Default select example">
+							<option value="online" <%=(lecture_preference.mode=="online" ? "selected" : "" ) %>>Online
+							</option>
+							<option value="offline" <%=(lecture_preference.mode=="offline" ? "selected" : "" )
+										%>>Offline</option>
+						</select>
+
+						<button type="submit" class="btn btn-primary btn-sm mt-3">Update</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<%}%>

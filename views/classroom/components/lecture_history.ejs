@@ -1,0 +1,66 @@
+<!--Scheduled Classes-->
+<div class="event_calendar p-3">
+    <h4 class="text-primary fw-bold">Ended Lectures</h4>
+    <script type="text/javascript">
+        var lecture_date;
+        var day;
+    </script>
+    <% if(Object.keys(lectures).length == 0) { %>
+    <div class="joined_classes_empty p-3">
+        <img src="static/images/empty_joined_class.svg" class="empty_joined_class_img" alt="" srcset="">
+        <h6 class="mt-3">No Classroom Joined</h6>
+    </div>
+    <% }%>
+    <% for(const lecture in lectures){ %>
+    <% if(Date.parse(lecture) < Date.now()) {%>
+    <div class="events mt-3">
+        <h5>
+            <script type="text/javascript">
+                lecture_date = new Date("<%= lecture %>");
+                console.log(lecture_date);
+                day = "";
+                switch (lecture_date.getDay()) {
+                    case 0: day = "Sunday";
+                        break;
+                    case 1: day = "Monday";
+                        break;
+                    case 2: day = "Tuesday";
+                        break;
+                    case 3: day = "Wednesday";
+                        break;
+                    case 4: day = "Thursday";
+                        break;
+                    case 5: day = "Friday";
+                        break;
+                    case 6: day = "Saturday";
+                        break;
+                }
+
+                document.write(day + ', ' + lecture_date.getDate() + '-' + new Intl.DateTimeFormat('en-US', { month: 'long' }).format(lecture_date) + '-' + lecture_date.getFullYear());
+            </script>
+        </h5>
+        <hr>
+        <div class="event_cards">
+            <% for(let i=0; i<Object.keys(lectures[lecture]).length; i++) {%>
+            <% if(true) {%>
+            <a href="<%= baseURL + 'lecture/' + class_unique_key + '/' + lectures[lecture][i].id %>"
+                class="card border event_card p-2" style="background-color: #616161;">
+                <p class="event_time m-0">
+                    <%= lectures[lecture][i].start_time.substring(0, 5) %> -
+                    <%= lectures[lecture][i].end_time.substring(0, 5) %>
+                </p>
+                <h5 class="fw-bold">
+                    <%= lectures[lecture][i].title.substring(0, 19) %>
+                    <% if(lectures[lecture][i].title.length > 19) {%>
+                    ...
+                    <%}%>
+                        </h5>
+                    </a>
+                    <%}%>
+                    <%}%>
+            </div>
+        </div>
+        <%}%>
+                    <% } %>
+
+        </div>
