@@ -1,3 +1,189 @@
-<div class="main-content">
+<div class="container mt-2 z-depth-1">
+
+
+    <!--Section: Content-->
+    <section class="dark-grey-text">
+
+        <div class="row pr-lg-5">
+            <div class="col-md-7 mb-4">
+
+                <div class="view">
+                    <img src="<%= baseURL+'static/images/homepage_1.svg' %>" class="img-fluid" alt="smaple image">
+                </div>
+
+            </div>
+            <div class="col-md-5 d-flex align-items-center">
+                <div>
+
+                    <h3 class="font-weight-bold mb-4">MyClass</h3>
+
+                    <p>
+                        A community web application where users can create and join classes. Owner of the class can
+                        manage and track the students, can schedule new lectures and share the resources and notes for a
+                        particular lecture, mark the attendance of the students, live chat for every particular lecture.
+                    </p>
+
+                    <a href="<%= baseURL + 'auth' %> " class="btn btn-primary btn-rounded mx-0">Signup Now</a>
+
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <!--Section: Content-->
+</div>
+
+<div class="container py-5 my-5">
+    <section class="p-md-3 mx-md-5">
+        <div class="row mb-5 d-flex align-items-center">
+            <div class="col-lg-6 col-md-6">
+                <div class="card border">
+                    <div class="card-header white">
+                        <h4 class="font-weight-bold mb-0">Create and Join Classes</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            After successful registration of the user. User can create and join classes.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="view overlay rounded z-depth-1 border">
+                    <img src="<%= baseURL+'static/images/feature_1.png' %>" class="img-fluid"
+                        alt="Sample project image" />
+                </div>
+            </div>
+        </div>
+        <div class="row mb-5 d-flex align-items-center justify-content-end">
+            <div class="col-md-6 col-lg-4">
+                <div class="view overlay rounded z-depth-1 border">
+                    <img src="<%= baseURL+'static/images/feature_2.png' %>" class="img-fluid"
+                        alt="Sample project image" />
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="card border">
+                    <div class="card-header white">
+                        <h4 class="font-weight-bold mb-0">Schedule and Manage Lectures</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            After creating class, Users can schedule and manage lectures with interactive dashboard.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-5 d-flex align-items-center">
+            <div class="col-lg-6 col-md-6">
+                <div class="card border">
+                    <div class="card-header white">
+                        <h4 class="font-weight-bold mb-0">Manage Attendance</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            Owner of the class can mark the attendance of the users who joined a particular lecture.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="view overlay rounded z-depth-1 border">
+                    <img src="<%= baseURL+'static/images/feature_3.png' %>" class="img-fluid"
+                        alt="Sample project image" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5 d-flex align-items-center justify-content-end">
+            <div class="col-md-6 col-lg-4">
+                <div class="view overlay rounded z-depth-1 border">
+                    <img src="<%= baseURL+'static/images/feature_4.png' %>" class="img-fluid"
+                        alt="Sample project image" />
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="card border">
+                    <div class="card-header white">
+                        <h4 class="font-weight-bold mb-0">Live discussion for every lecture</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            Users can discuss the class for every scheduled lectures.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="container my-5">
+
+	<style>
+    .border-top {
+      border-top: 5px solid #33b5e5 !important;
+      border-top-left-radius: .25rem!important;
+    	border-top-right-radius: .25rem!important;
+    }
+  </style>
+
+  <!--Section: Content-->
+  <section class="text-center dark-grey-text mb-5">
+
+    <div class="card">
+      <div class="card-body rounded-top border-top p-5">
+        
+        <!-- Section heading -->
+        <h3 class="font-weight-bold my-4">Contact Us</h3>
+        <!-- Section description -->
+        <form class="mb-4 mx-md-5" action="">
+
+          <div class="row">
+            <div class="col-md-6 mb-4">
+
+              <!-- Name -->
+              <input type="text" id="name" class="form-control" placeholder="Name">
+
+            </div>
+            <div class="col-md-6 mb-4">
+
+              <!-- Email -->
+              <input type="email" id="email" class="form-control" placeholder="Email">
+
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12 mb-4">
+
+              <!-- Subject -->
+              <input type="text" id="subject" class="form-control" placeholder="Subject">
+
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+
+              <div class="form-group mb-4">
+                <textarea class="form-control rounded" id="message" rows="3" placeholder="How can we help?"></textarea>
+              </div>
+
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-md">Submit</button>
+              </div>
+
+            </div>
+          </div>
+
+        </form>
+        
+      </div>
+    </div>
+
+  </section>
+  <!--Section: Content-->
 
 </div>

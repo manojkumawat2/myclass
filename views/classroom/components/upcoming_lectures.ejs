@@ -5,10 +5,10 @@
         var lecture_date;
         var day;
     </script>
-    <% if(Object.keys(lectures).length == 0) { %>
+    <% if(total_upcoming_lectures == 0) { %>
     <div class="joined_classes_empty p-3">
-        <img src="static/images/empty_joined_class.svg" class="empty_joined_class_img" alt="" srcset="">
-        <h6 class="mt-3">No Classroom Joined</h6>
+        <img src="<%= baseURL + 'static/images/empty_joined_class.svg' %>" class="empty_joined_class_img" alt="" srcset="">
+        <h6 class="mt-3">No Lecture</h6>
     </div>
     <% }%>
     <% for(const lecture in lectures){ %>

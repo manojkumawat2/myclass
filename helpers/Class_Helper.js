@@ -27,13 +27,22 @@ class Class_Helper {
         let class_info = await this.get_class_details_from_unique_key(unique_key);
         let lectures = await this.get_all_schedules_by_class_id(class_info.id);
 
-        data.lectures = this.get_the_correct_format_of_lectures(lectures);
+        data.lectures = this.get_the_correct_format_of_lectures(lectures, data);
     }
 
-    get_the_correct_format_of_lectures(lectures) {
+    get_the_correct_format_of_lectures(lectures, data) {
         let lecture_format = {};
+        let total_upcoming_lectures = 0;
+        let history_lectures = 0;
 
         for(let i=0; i<lectures.length; i++) {
+            let date = Date.parse(lectures[i].date);
+            let now_date = Date.now();
+            if(date >= now_date) {
+                total_upcoming_lectures++;
+            } else {
+                history_lectures++;
+            }
             if(lecture_format[lectures[i].date]) {
                 lecture_format[lectures[i].date].push(
                     lectures[i]
@@ -43,6 +52,8 @@ class Class_Helper {
             }
             
         }
+        data.total_upcoming_lectures = total_upcoming_lectures;
+        data.total_history_lectures = history_lectures;
         return lecture_format;
     }
 
