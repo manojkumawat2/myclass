@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(upload.array());
 app.use('/static', express.static('public'));
 
-app.locals.baseURL = "http://127.0.0.1:8080/";
+app.locals.baseURL = "http://myclass-env-1.eba-2ptkjeqs.us-east-2.elasticbeanstalk.com/";
 const template = 'template/template';
 
 
