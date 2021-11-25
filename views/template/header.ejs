@@ -1,3 +1,4 @@
+
 <!-- Navbar -->
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -13,21 +14,17 @@
         <!-- Collapsible wrapper -->
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Navbar brand -->
-            <a class="navbar-brand mt-2 mt-lg-0" href="#">
+            <a class="navbar-brand mt-2 mt-lg-0" href="<%= baseURL %>">
                 <img src="<%= baseURL + 'static/images/logo.png' %>" height="45" alt=""
                     loading="lazy" />
             </a>
             <!-- Left links -->
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Team</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Projects</a>
-                </li>
+                <% if(session.user) {%>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<%= baseURL %>">All Classes</a>
+                    </li>
+                <%}%>
             </ul>
             <!-- Left links -->
         </div>
@@ -38,7 +35,7 @@
             <% if(session.user) { %>
 
             <!-- Notifications -->
-            <a class="text-reset me-3 dropdown-toggle hidden-arrow" href="#" id="navbarDropdownMenuLink" role="button"
+            <!-- <a class="text-reset me-3 dropdown-toggle hidden-arrow" href="#" id="navbarDropdownMenuLink" role="button"
                 data-mdb-toggle="dropdown" aria-expanded="false">
                 <i class="fas fa-bell"></i>
                 <span class="badge rounded-pill badge-notification bg-danger">1</span>
@@ -53,7 +50,7 @@
                 <li>
                     <a class="dropdown-item" href="#">Something else here</a>
                 </li>
-            </ul>
+            </ul> -->
 
             <!-- create and join classroom -->
             <a class="text-reset me-3 dropdown-toggle hidden-arrow" href="#" id="navbarDropdownMenuLink" role="button"
@@ -76,13 +73,6 @@
                     loading="lazy" />
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                
-                    <li>
-                        <a class="dropdown-item" href="#">My profile</a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#">Settings</a>
-                    </li>
                     <li>
                         <a class="dropdown-item" href="<%= baseURL+'auth/logout' %>">Logout</a>
                     </li>

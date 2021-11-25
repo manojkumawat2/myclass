@@ -94,6 +94,51 @@ class Lecture_Helper {
 			});
 		});
 	}
+
+	is_attendance_already_marked(lecture_id, student_id) {
+		let query = "SELECT id FROM attendance WHERE lecture_id = ? AND user_id = ?";
+		let values = [lecture_id, student_id];
+
+		return new Promise(function(resolve, reject) {
+			connection.query(query, values, function(err, rows) {
+				if(err) {
+					console.log(err);
+					return resolve(null);
+				}
+				if(rows.length > 0) {
+					return resolve(rows[0].id);
+				}
+				return resolve(-1);
+			})
+		});
+	}
+
+	async mark_student_attendance(lecture_id, student_id, attendance) {
+		let is_already_marked = await this.is_attendance_already_marked(lecture_id, student_id);
+		//console.log(is_already_marked);
+		let query;
+		let values;
+		if(is_already_marked > 0) {
+			query = "UPDATE attendance SET is_present = ? WHERE id = ?";
+			values = [attendance, is_already_marked];
+		} else {
+			query = "INSERT INTO attendance (lecture_id, user_id, is_present) VALUES (?)";
+			values = [[lecture_id, student_id, attendance]];
+		}
+
+		return new Promise(function(resolve, reject) {
+			connection.query(query, values, function(err, rows) {
+				if(err) {
+					console.log(err);
+					return resolve(false);
+				} else {
+					return resolve(true);
+				}
+			});
+		})
+
+	}
+
 }
 
 module.exports = Lecture_Helper;

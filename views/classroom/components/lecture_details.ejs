@@ -61,6 +61,14 @@
 					<%= lecture_details.offline_seats %>
 				</td>
 			</tr>
+			<tr>
+				<td class="fw-bold text-center">Online Class Link: </td>
+				<td>
+					<a href="<%= baseURL + 'meeting/room?room=' + lecture_details.meeting_id + '&unique_key=' + class_unique_key %>" target="_blank">
+						Join Now <i class="fas fa-external-link-alt"></i>
+					</a>
+				</td>
+			</tr>
 			<% if(role=="student" ) {%>
 			<tr>
 				<td class="fw-bold text-center">Your Preference: </td>
@@ -80,7 +88,7 @@
 	</table>
 	<div class="lecture_desciption_show">
 		<h4 class="fw-bold">Lecture Description</h4>
-		<div>
+		<div class="border-top border-primary border-4 rounded-2 p-2">
 			<%- lecture_details.description %>
 		</div>
 	</div>
@@ -97,6 +105,9 @@
 				<button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
+				<div class="error_show alert alert-danger align-items-center">
+        
+    			</div>
 				<form id="lecture_schedule" action="<%= baseURL+'update_lecture_details' %>" method="post">
 					<input type="hidden" name="class_unique_key" value="<%= class_unique_key %>">
 					<input type="hidden" name="lecture_id" value="<%= lecture_id %>">
@@ -186,10 +197,9 @@
 						<label for="select_preference" class="form-label">Lecture Mode</label>
 						<select name="select_preference" id="select_preference" class="form-select"
 							aria-label="Default select example">
-							<option value="online" <%=(lecture_preference.mode=="online" ? "selected" : "" ) %>>Online
+							<option value="online" >Online
 							</option>
-							<option value="offline" <%=(lecture_preference.mode=="offline" ? "selected" : "" )
-										%>>Offline</option>
+							<option value="offline">Offline</option>
 						</select>
 
 						<button type="submit" class="btn btn-primary btn-sm mt-3">Update</button>

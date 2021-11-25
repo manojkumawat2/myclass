@@ -4,6 +4,8 @@ var router = express.Router();
 var Class_Helper = require("../helpers/Class_Helper");
 const Common_Helpers = require('../helpers/Common_Helpers');
 const Lecture_Helper = require('../helpers/Lecture_Helper');
+const Chat_Helper = require('../helpers/Chat_Helper');
+const User_Helper = require('../helpers/User_Helper');
 
 const template = 'template/template';
 
@@ -74,7 +76,10 @@ router.post('/submit_lecture_details', async function(req, res) {
         data.status = status;
         if(status == "error") {
             data.message = "Please try again.";
-        } else {
+        } else if(status == "exist") {
+            data.status = "error";
+            data.message = "An Class is already scheduled in between this time period."
+        }else {
             data.message = "Lecture scheduled successfully.";
             data.success_page = "/class/" + req.body.class_unique_key;
         }
@@ -131,6 +136,11 @@ router.get('/lecture/:unique_key/:lecture_id', async function(req, res) {
     if(req.session.user) {
         let class_helper = new Class_Helper();
         let lecture_helper = new Lecture_Helper();
+        let chat_helper = new Chat_Helper();
+        let user_helper = new User_Helper();
+        let user_details = await user_helper.get_user_details_from_user_id(req.session.user);
+        let class_info = await class_helper.get_class_details_from_unique_key(unique_key);
+        data.user_details = user_details;
         data.view = 'classroom/lecture';
         data.role = await class_helper.get_role(unique_key, req.session.user);
         data.lecture_details = await lecture_helper.get_lecture_details(lecture_id);
@@ -138,6 +148,8 @@ router.get('/lecture/:unique_key/:lecture_id', async function(req, res) {
         data.class_unique_key = unique_key;
         data.lecture_id = lecture_id;
         data.lecture_preference = await lecture_helper.get_student_lecture_preference(req.session.user, lecture_id);
+        data.chat_messages = await chat_helper.get_all_lecture_messages(lecture_id);
+        data.attendance_details = await user_helper.get_users_list_for_lecture_dashboard(lecture_id, class_info.id);
         res.render(template, data);
     } else {
         res.redirect('/');
@@ -155,17 +167,49 @@ router.get('/class/:unique_key', async function (req, res) {
         data.class_unique_key = unique_key;
         await class_helper.get_class_homepage_data(data, unique_key, req.session.user);
         data.event_card_colors = Common_Helpers.event_card_colors;
-
-        if (data.role == "faculty") {
-
-        } else if (data.role == "student") {
-
-        } else {
-
-        }
+        data.students_list = await class_helper.get_students_list(unique_key);
         res.render(template, data);
     } else {
         res.redirect('/auth');
+    }
+});
+
+
+router.get('/remove_user/:unique_key/:id', async function(req, res) {
+    if(req.session.user) {
+        let user_id = req.params.id;
+        let unique_key = req.params.unique_key;
+
+        let class_helper = new Class_Helper();
+
+        let status = await class_helper.remove_class_joined_user(unique_key, user_id);
+
+        return res.redirect('/class/' + unique_key);
+
+    }
+    return res.redirect('/auth');
+});
+
+router.get('/mark_attendance/:unique_key/:lecture_id/:student_id/:is_present', async function(req, res) {
+    var data = {};
+    if(req.session.user) {
+        let class_helper = new Class_Helper();
+        let lecture_helper = new Lecture_Helper();
+        let role = await class_helper.get_role(req.params.unique_key, req.session.user);
+        if(role != "faculty") {
+            return res.redirect('/');
+        }
+        let status = await lecture_helper.mark_student_attendance(req.params.lecture_id, req.params.student_id, req.params.is_present);
+        if(status == false) {
+            data.success = "error";
+            data.message = "Attendance not marked. Please try again!";
+        } else {
+            data.success = "success";
+        }
+
+        return res.json(data);
+    } else {
+        res.redirect('/');
     }
 });
 module.exports = router;

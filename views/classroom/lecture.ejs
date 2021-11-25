@@ -13,6 +13,7 @@
 		  >Lecture Info</a
 		>
 	  </li>
+	  <% if(role == "faculty") {%>
 	  <li class="nav-item" role="presentation">
 		<a
 		  class="nav-link fw-bold"
@@ -25,6 +26,7 @@
 		  >Attendance</a
 		>
 	  </li>
+	  <%}%>
 	  <li class="nav-item" role="presentation">
 		<a
 		  class="nav-link fw-bold"
@@ -45,37 +47,13 @@
 	  <div class="tab-pane fade show active p-3" id="ex2-tabs-1" role="tabpanel" aria-labelledby="ex2-tab-1">
 		<%- include('./components/lecture_details.ejs') %>
 	  </div>
+	  <% if(role == "faculty") {%>
 	  <div class="tab-pane fade" id="ex2-tabs-2" role="tabpanel" aria-labelledby="ex2-tab-2">
-		<!--Students Details and Attendance Details---->
-		<table class="table table-bordered table-hover">
-			<thead>
-				<tr>
-					<th>Name</th>
-					<th>Email</th>
-					<th>Selected Mode</th>
-					<th>Attendance</th>
-				</tr>
-			</thead>
-			<tbody>
-				<% for(let i=0; i<students_list.length; i++) {%>
-				<tr>
-					<td><%= students_list[i].name %></td>
-					<td><%= students_list[i].email %></td>
-					<td>
-
-					</td>
-					<td>
-						<div class="form-check form-switch">
-						  <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
-						</div>
-					</td>
-				</tr>
-				<%}%>
-			</tbody>
-		</table>
+		<%- include('./components/attendance.ejs') %>
 	  </div>
+	  <%}%>
 	  <div class="tab-pane fade" id="ex2-tabs-3" role="tabpanel" aria-labelledby="ex2-tab-3">
-		Tab 2 content
+		<%- include('./components/chat.ejs') %>
 	  </div>
 
 	</div>

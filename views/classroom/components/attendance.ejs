@@ -1,0 +1,27 @@
+<!--Students Details and Attendance Details---->
+<table class="table table-bordered table-hover">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Email</th>
+			<th>Selected Mode</th>
+			<th>Attendance</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% for(let i=0; i<attendance_details.length; i++) {%>
+		<tr data-user_id = <%= attendance_details[i].id %> data-unique_key = <%= class_unique_key %> data-lecture_id = <%= lecture_id %>>
+			<td><%= attendance_details[i].name %></td>
+			<td><%= attendance_details[i].email %></td>
+			<td>
+				<%= (attendance_details[i].mode != null) ? attendance_details[i].mode : "Not Selected" %>
+			</td>
+			<td>
+				<div class="form-check form-switch">
+				  <input class="form-check-input mark_attendance_toggle" type="checkbox" role="switch" <%= (attendance_details[i].is_present == 1) ? "checked" : "" %> />
+				</div>
+			</td>
+		</tr>
+		<%}%>
+	</tbody>
+</table>

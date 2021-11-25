@@ -2,6 +2,9 @@
     <h4 class="text-primary fw-bold">
         Schedule a New Lecture
     </h4>
+    <div class="error_show alert alert-danger align-items-center">
+        
+    </div>
     <!-- Buttons trigger collapse -->
     <form id="lecture_schedule" action="<%= baseURL+'submit_lecture_details' %>" method="post">
         <input type="hidden" name="class_unique_key" value="<%= class_unique_key %>">

@@ -5,7 +5,7 @@ class User_Builder {
     constructor() {
     }
 
-    async create_new_user(user_info) {
+    async create_new_user(user_info, req) {
         let name = user_info.name;
         let email = user_info.register_email;
         let password = user_info.register_password;
@@ -31,9 +31,10 @@ class User_Builder {
             connection.query(query, values, function(err, result) {
                 if(err) {
                     console.log(err);
-                    resolve("Please try again.");
+                    return resolve("Please try again.");
                 }
-                resolve("success");
+                req.session.user = result.insertId;
+                return resolve("success");
             });
         });
         return await message;

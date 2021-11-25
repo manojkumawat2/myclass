@@ -21,6 +21,29 @@ $(document).ready(function () {
 
     update_preference_from_validation();
 
+    /**
+     * Copy Content
+     **/
+     $(document).on('click', '#unique_code_copy_button', function() {
+        $('#unique_code_copy_input').select();
+        document.execCommand('copy');
+     });
+
+     /**
+      * Student Search in table
+      **/
+      $("#student_search_input").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#student_table_body tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+
+
+      /**
+       * Student Attendance Mark
+       **/
+       mark_attendace();
 });
 
 /**
@@ -265,5 +288,29 @@ function update_preference_from_validation() {
             });
             return false;
         }
+    });
+}
+
+
+/**
+* Mark Attendance
+**/
+
+function mark_attendace() {
+    $(".mark_attendance_toggle").change(function() {
+        let row = $(this).parent().parent().parent();
+        let user_id = row.attr('data-user_id');
+        let unique_key = row.attr('data-unique_key');
+        let lecture_id = row.attr('data-lecture_id');
+        let attendance = $(this).is(':checked') ? 1 : 0;
+
+        let url = window.location.origin + "/mark_attendance/" + unique_key + '/' + lecture_id + '/' + user_id + '/' + attendance;
+        console.log(url);
+        $.ajax(url, {
+            success: form_success,
+            error: form_error,
+            method: "GET",
+        });
+        return false;
     });
 }

@@ -26,6 +26,9 @@ router.use(session({
 
 router.get('/', csrfProtection, function(req, res) {
     res.locals.session = req.session;
+    if(req.session.user) {
+        return res.redirect('/');
+    }
     res.render(template, {
         view: 'login',
         csrfToken: req.csrfToken()
@@ -41,6 +44,7 @@ router.post('/login', parseForm, csrfProtection, function(req, res) {
         if(reslt.status == "success") {
             req.session.user = reslt.user_data.id;
             reslt.success_page = '/';
+            res.cookie('user_id', req.session.user);
         }
         res.send(reslt);
     });
@@ -51,11 +55,10 @@ router.post('/register', parseForm, csrfProtection, function (req, res) {
     let user_info = req.body;
     let user_builder = new User_Builder();
     let message;
-    user_builder.create_new_user(user_info).then(function(reslt) {
+    user_builder.create_new_user(user_info, req).then(function(reslt) {
         message = reslt;
         let result = {};
         if (message === "success") {
-            req.session.user = user_info.register_email;
             result.status = "success";
             result.message = "User created successfully";
             result.success_page = '/';

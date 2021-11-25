@@ -40,6 +40,38 @@ class User_Helper {
         })
     }
 
+    get_user_details_from_user_id(user_id) {
+        let query = "SELECT * FROM users WHERE id = ?";
+        let values = [user_id];
+
+        return new Promise(function(resolve, reject) {
+            connection.query(query, values, function(err, rows) {
+                if(err) {
+                    resolve(null);
+                } else {
+                    resolve(rows[0]);
+                }
+            })
+        });
+    }
+
+    get_users_list_for_lecture_dashboard(lecture_id, class_id) {
+        let query = "SELECT * FROM users " +
+                    "WHERE users.id IN (SELECT user_id FROM classes_join WHERE class_id = ?) ";
+
+        let values = [class_id, lecture_id, lecture_id];
+
+        return new Promise(function(resolve, reject) {
+            connection.query(query, values, function(err, rows) {
+                if(err) {
+                    console.log(err);
+                    resolve(err);
+                } else {
+                    resolve(rows);
+                }
+            });
+        });
+    }
     
 }
 

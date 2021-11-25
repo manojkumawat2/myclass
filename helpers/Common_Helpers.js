@@ -24,6 +24,10 @@ class Common_Helpers {
     static generate_unique_class_code() {
         return uuid.v1();
     }
+
+    static generate_meeting_id() {
+        return uuid.v4();
+    }
 }
 
 module.exports = Common_Helpers;

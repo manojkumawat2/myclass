@@ -1,0 +1,93 @@
+<div class="container my-5 border p-2">
+
+
+  <!--Section: Content-->
+  <section class="dark-grey-text">
+
+    <!-- Section heading -->
+    <h3 class="text-center font-weight-bold mb-4 pb-2"><%= class_info.subject %></h3>
+    <hr class="w-header">
+    <% if(role == 'faculty') {%>
+    <div class="row">
+      <div class="unique_code_clipboard_div col-sm">
+        <label class="fw-bold text-muted mb-1">Share the Code</label>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" id="unique_code_copy_input" value="<%= class_info.unique_key %>" readonly>
+          <button class="btn btn-outline-primary" type="button" id="unique_code_copy_button">Copy</button>
+        </div>
+      </div>
+      
+      <div class="view_all_students_div col-sm text-center">
+          <button type="button" class="btn btn-primary btn-rounded mt-4" data-mdb-toggle="modal" data-mdb-target="#show_all_students_modal">View All Students</button>
+      </div>
+    </div>
+    <hr>
+    <%}%>
+    <!-- Section description -->
+    <h5 class="fw-bold">Class Details</h5>
+    <p class="lead text-muted mt-4 pt-1 mb-3">
+      <%= class_info.description %>
+    </p>
+
+	</section>  
+  
+</div>
+
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="show_all_students_modal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">All Students</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-mdb-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="input-group mb-3">
+          <input type="text" id="student_search_input" class="form-control" placeholder="Search Students">
+          <span class="input-group-text" id="basic-addon2"><i class="fas fa-search"></i></span>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="student_table_body">
+            <% for(let i=0; i<students_list.length; i++) {%>
+              <tr>
+                <td><%= students_list[i].name %></td>
+                <td><%= students_list[i].email %></td>
+                <td>
+                  <a
+                    href="<%= baseURL + 'remove_user/' + class_unique_key + '/' + students_list[i].id%>"
+                    class="btn btn-outline-danger btn-floating"
+                    data-mdb-ripple-color="dark"
+                     data-mdb-toggle="tooltip"
+                      data-mdb-html="true"
+                      title="<b>Remove Student</b>"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </a>
+                </td>
+              </tr>
+            <%}%>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

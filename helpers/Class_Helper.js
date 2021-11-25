@@ -23,11 +23,25 @@ class Class_Helper {
         });
     }
 
+    async remove_class_joined_user(unique_key, user_id) {
+        let class_info = await this.get_class_details_from_unique_key(unique_key);
+
+        let query = "DELETE FROM classes_join WHERE classes_join.user_id = ? AND classes_join.class_id = ?";
+        let values = [user_id, class_info.id];
+
+        return new Promise(function(resolve, reject) {
+            connection.query(query, values, function(err, rows) {
+                return resolve(true);
+            })
+        })
+    }
+
     async get_class_homepage_data(data, unique_key, user_id) {
         let class_info = await this.get_class_details_from_unique_key(unique_key);
         let lectures = await this.get_all_schedules_by_class_id(class_info.id);
 
         data.lectures = this.get_the_correct_format_of_lectures(lectures, data);
+        data.class_info = class_info;
     }
 
     get_the_correct_format_of_lectures(lectures, data) {
@@ -90,9 +104,16 @@ class Class_Helper {
 
     async schedule_new_lecture(lecture_data, user_id) {
         let class_details = await this.get_class_details_from_unique_key(lecture_data.class_unique_key);
+        let is_lecture_schedule_is_valid = await this.is_lecture_schedule_is_valid(lecture_data.lecture_date, lecture_data.start_time, lecture_data.end_time, class_details.id);
+        
+        if(!is_lecture_schedule_is_valid) {
+            return "exist";
+        }
 
-        let query = "INSERT INTO lectures (title, date, start_time, end_time, lecture_mode, description, offline_seats, class_id, user_id) values (?)";
-        let values = [[lecture_data.title, lecture_data.lecture_date, lecture_data.start_time, lecture_data.end_time, lecture_data.lecture_mode, lecture_data.lecture_description, lecture_data.available_seats, class_details.id ,user_id]];
+        let meeting_id = Common_Helpers.generate_meeting_id();
+
+        let query = "INSERT INTO lectures (title, date, start_time, end_time, lecture_mode, description, offline_seats, class_id, user_id, meeting_id) values (?)";
+        let values = [[lecture_data.title, lecture_data.lecture_date, lecture_data.start_time, lecture_data.end_time, lecture_data.lecture_mode, lecture_data.lecture_description, lecture_data.available_seats, class_details.id ,user_id, meeting_id]];
 
         return new Promise(function(resolve, reject) {
             connection.query(query, values, function(err, rows) {
@@ -101,6 +122,27 @@ class Class_Helper {
                     resolve("error");
                 } else {
                     resolve("success");
+                }
+            });
+        });
+    }
+
+    is_lecture_schedule_is_valid(lecture_date, lecture_start_time, lecture_end_time, class_id) {
+        let query = "SELECT id FROM lectures WHERE date = CONVERT(?, DATE) AND class_id = ? AND " + 
+                    "((CONVERT(?, TIME) BETWEEN start_time AND end_time) OR (CONVERT(?, TIME) BETWEEN start_time AND end_time))";
+
+        let values = [lecture_date, class_id, lecture_start_time, lecture_end_time];
+
+        return new Promise(function(resolve, reject) {
+            connection.query(query, values, function(err, rows) {
+                if(err) {
+                    console.log(err);
+                    return resolve(false);
+                } else {
+                    if(rows.length > 0) {
+                        return resolve(false);
+                    }
+                    return resolve(true);
                 }
             });
         });
@@ -122,6 +164,7 @@ class Class_Helper {
 
     async get_role(unique_key, user_id) {
         let class_info = await this.get_class_details_from_unique_key(unique_key);
+        console.log(class_info);
 
         let is_faculty = await this.is_user_owner_of_the_class(user_id, class_info.id);
 
@@ -255,6 +298,14 @@ class Class_Helper {
 
         if(is_user_already_joined.status == "success") {
             return is_user_already_joined;
+        }
+
+        let class_info = await this.get_class_details_from_unique_key(unique_key);
+
+        let is_user_owner_of_the_class = await this.is_user_owner_of_the_class(user_id, class_info.id);
+
+        if(is_user_owner_of_the_class) {
+            return {"status" : "error", "message" : "You can't join as a student to this class." };
         }
 
         let inserted_data = await this.insert_new_join_class_entry(user_id, is_class_exist.class_id);
