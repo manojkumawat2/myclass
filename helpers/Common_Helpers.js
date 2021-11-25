@@ -1,4 +1,4 @@
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcryptjs');
 var uuid = require('uuid');
 
 class Common_Helpers {
