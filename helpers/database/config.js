@@ -1,11 +1,11 @@
 var mysql = require("mysql");
 
 var connection = mysql.createConnection({
-    host: "myclass.cpu4v9ve25zl.us-east-2.rds.amazonaws.com",
+    host: process.env.hostname ? process.env.hostname : "localhost",
     port: '3306',
-    user: "root",
-    password: "12345678",
-    database: "myclass",
+    user: process.env.username ? process.env.username : "root",
+    password: process.env.password ? process.env.password : "12345678",
+    database: process.env.db_name ? process.env.db_name : "myclass",
 });
 
 connection.connect(function(err) {
