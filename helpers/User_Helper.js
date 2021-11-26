@@ -1,5 +1,7 @@
 var connection = require("./database/config");
 var Common_Helpers = require("./Common_Helpers");
+var Class_Helper = require('./Class_Helper');
+var Lecture_Helper = require('./Lecture_Helper');
 
 class User_Helper {
     constructor() {
@@ -56,22 +58,59 @@ class User_Helper {
         });
     }
 
-    get_users_list_for_lecture_dashboard(lecture_id, class_id) {
-        let query = "SELECT * FROM users " +
-                    "WHERE users.id IN (SELECT user_id FROM classes_join WHERE class_id = ?) ";
+    async get_users_list_for_lecture_dashboard(lecture_id, class_id) {
+        let students_joined_class = await this.get_student_list_using_class_id(class_id);
 
-        let values = [class_id, lecture_id, lecture_id];
+        let lecture_helper = new Lecture_Helper();
+        let students_attendance = await lecture_helper.get_student_attendance_by_lecture_id(lecture_id);
+
+        let students_preferences = await lecture_helper.get_students_lecture_preferences_by_lecture_id(lecture_id);
+
+
+        let final_result = this.customize_data_according_to_dashboard(students_joined_class, students_preferences, students_attendance);
+
+        return final_result;
+    }
+
+    customize_data_according_to_dashboard(students_joined_class, students_preferences, students_attendance) {
+        let result = {};
+
+        for(let i = 0; i < students_joined_class.length; i++) {
+            if(!result[students_joined_class[i].id]) {
+                result[students_joined_class[i].id] = {};
+            }
+            result[students_joined_class[i].id].id = students_joined_class[i].id;
+            result[students_joined_class[i].id].name = students_joined_class[i].name;
+            result[students_joined_class[i].id].email = students_joined_class[i].email;
+            result[students_joined_class[i].id].is_present = 0;
+            result[students_joined_class[i].id].mode = null;
+        }
+
+        for(let i = 0; i < students_attendance.length; i++) {
+            result[students_attendance[i].user_id].is_present = students_attendance[i].is_present ? students_attendance[i].is_present : 0;
+        }
+
+        for(let i = 0; i < students_preferences.length; i++) {
+            result[students_preferences[i].user_id].mode = students_preferences[i].mode ? students_preferences[i].mode : null;
+        }
+
+        return result;
+    }
+
+    get_student_list_using_class_id(class_id) {
+        let query = "SELECT users.id, users.name, users.email FROM users INNER JOIN classes_join ON users.id = classes_join.user_id WHERE classes_join.class_id = ?";
+        let values = [class_id];
 
         return new Promise(function(resolve, reject) {
             connection.query(query, values, function(err, rows) {
                 if(err) {
                     console.log(err);
-                    resolve(err);
+                    return resolve(null);
                 } else {
-                    resolve(rows);
+                    return resolve(rows);
                 }
             });
-        });
+        })
     }
     
 }

@@ -139,6 +139,38 @@ class Lecture_Helper {
 
 	}
 
+
+	get_student_attendance_by_lecture_id(lecture_id) {
+		let query = "SELECT * FROM attendance WHERE lecture_id = ?";
+		let values = [lecture_id];
+
+		return new Promise(function(resolve, reject) {
+			connection.query(query, values, function(err, rows) {
+				if(err) {
+					console.log(err);
+					return resolve(err);
+				} else {
+					return resolve(rows);
+				}
+			})
+		});
+	}
+
+	get_students_lecture_preferences_by_lecture_id(lecture_id) {
+		let query = "SELECT * FROM student_preferences WHERE lecture_id = ?";
+		let values = [lecture_id];
+
+		return new Promise(function(resolve, reject) {
+			connection.query(query, values, function(err, rows) {
+				if(err) {
+					console.log(err);
+					return resolve(err);
+				} else {
+					return resolve(rows);
+				}
+			})
+		})
+	}
 }
 
 module.exports = Lecture_Helper;

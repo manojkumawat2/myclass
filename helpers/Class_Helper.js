@@ -164,8 +164,7 @@ class Class_Helper {
 
     async get_role(unique_key, user_id) {
         let class_info = await this.get_class_details_from_unique_key(unique_key);
-        console.log(class_info);
-
+        
         let is_faculty = await this.is_user_owner_of_the_class(user_id, class_info.id);
 
         if(is_faculty) {
