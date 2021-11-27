@@ -14,6 +14,7 @@ const audioButt = document.querySelector('.audio');
 const cutCall = document.querySelector('.cutcall');
 const screenShareButt = document.querySelector('.screenshare');
 const whiteboardButt = document.querySelector('.board-icon')
+const streams = {};
 
 //whiteboard js start
 const whiteboardCont = document.querySelector('.whiteboard-cont');
@@ -321,6 +322,13 @@ function handleVideoOffer(offer, sid, cname, micinf, vidinf) {
             newvideo.id = `video${sid}`;
             newvideo.srcObject = event.streams[0];
 
+            streams[`${sid}`] = event.streams[0];
+
+
+            let modalBtn = document.createElement('button');
+            modalBtn.innerHTML = "Open";
+            modalBtn.id = "modalBtn";
+
             if (micInfo[sid] == 'on')
                 muteIcon.style.visibility = 'hidden';
             else
@@ -332,7 +340,7 @@ function handleVideoOffer(offer, sid, cname, micinf, vidinf) {
                 videoOff.style.visibility = 'visible';
 
             vidCont.appendChild(newvideo);
-            vidCont.appendChild(expandTag);
+            vidCont.appendChild(modalBtn);
             vidCont.appendChild(name);
             vidCont.appendChild(muteIcon);
             vidCont.appendChild(videoOff);
@@ -537,6 +545,7 @@ socket.on('join room', async (conc, cnames, micinfo, videoinfo) => {
                     newvideo.playsinline = true;
                     newvideo.id = `video${sid}`;
                     newvideo.srcObject = event.streams[0];
+                    streams[`${sid}`] = event.streams[0];
 
                     if (micInfo[sid] == 'on')
                         muteIcon.style.visibility = 'hidden';
@@ -548,8 +557,12 @@ socket.on('join room', async (conc, cnames, micinfo, videoinfo) => {
                     else
                         videoOff.style.visibility = 'visible';
 
+                    let modalBtn = document.createElement('button');
+                    modalBtn.innerHTML = "Open";
+                    modalBtn.id = "modalBtn";
+
                     vidCont.appendChild(newvideo);
-                    vidCont.appendChild(expandTag);
+                    vidCont.appendChild(modalBtn);
                     vidCont.appendChild(name);
                     vidCont.appendChild(muteIcon);
                     vidCont.appendChild(videoOff);
@@ -771,37 +784,27 @@ cutCall.addEventListener('click', () => {
 
 
 
+//Modal
+$(document).on('click', '#modalBtn', function() {
+        $('#myModal').modal("show");
+        console.log($('#modal'))
+        let sid = $(this).parent().attr('id');
+
+        document.querySelector("#large_screen_video").srcObject = streams[`${sid}`];
+
+        //$("#large_screen_video").attr('src', $(vidCont).attr("data-vide_src"));
+    })
+
+    $(document).on('click', '.close', function() {
+        $('#myModal').modal("hide");
+    })
     // Get the modal
-// var modal = document.getElementById("myModal");
 
-// // Get the button that opens the modal
-// var btn = document.querySelector(".myBtn");
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
 
-// // Get the <span> element that closes the modal
-// var span = document.getElementsByClassName("close")[0];
 
-// // When the user clicks on the button, open the modal
-// btn.onclick = function() {
-//   modal.style.display = "block";
-// }
-
-// // When the user clicks on <span> (x), close the modal
-// span.onclick = function() {
-//   modal.style.display = "none";
-// }
-
-// // When the user clicks anywhere outside of the modal, close it
-// window.onclick = function(event) {
-//   if (event.target == modal) {
-//     modal.style.display = "none";
-//   }
-// }
-
-// $(document).on('click', '.myBtn' ,function() {
-//     let vidCont = $(this).parent().parent();
-//     vidCont.css('width', '100%');
-// });
-
-// $('.close').on('click', function() {
-//     $('#myModal').css('display', 'none');
-// })
