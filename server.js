@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(upload.array());
 app.use('/static', express.static('public'));
 
-app.locals.baseURL = "http://localhost:8081/";
+app.locals.baseURL = "https://myclass.murl.tech/";
 const template = 'template/template';
 
 
