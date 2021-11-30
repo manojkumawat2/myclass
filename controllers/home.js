@@ -10,7 +10,7 @@ const User_Helper = require('../helpers/User_Helper');
 const template = 'template/template';
 
 router.use(session({
-    secret: process.env.secret || "123654",
+    secret: process.env.secret ? process.env.secret : "123654",
     resave: false,
     saveUninitialized: true
 }));
