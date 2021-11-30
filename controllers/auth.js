@@ -16,7 +16,7 @@ const template = 'template/template';
 
 router.use(cookieParser());
 router.use(session({
-    secret: process.env.secret || "123654",
+    secret: process.env.secret ? process.env.secret : "123654",
     resave: false,
     saveUninitialized: true,
     cookie: {
