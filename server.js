@@ -46,7 +46,7 @@ app.use('/meeting', meeting);
 var session = require('express-session');
 var cookie = require('cookie');
 app.use(session({
-    secret: "123654",
+    secret: process.env.secret ? process.env.secret : "123654",
     resave: false,
     saveUninitialized: true,
     cookie: {
