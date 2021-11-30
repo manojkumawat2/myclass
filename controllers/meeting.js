@@ -7,7 +7,7 @@ var Class_Helper = require('../helpers/Class_Helper');
 const template = 'template/template';
 
 router.use(session({
-    secret: "123654",
+    secret: process.env.secret ? process.env.secret : "123654",
     resave: false,
     saveUninitialized: true
 }));
