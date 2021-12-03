@@ -19,6 +19,7 @@ class User_Helper {
             let result = {};
             connection.query(query, values, function(err, rows) {
                 if(err) {
+                    console.log(err);
                     result.status = "error",
                     result.message = "Please try again";
                 } else {
